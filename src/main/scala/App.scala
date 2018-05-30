@@ -1,18 +1,23 @@
-
 object App {
   def main(args: Array[String]) {
     println("Hello basic-project!")
-    var graph = new Graph[Int, Double](Set.empty[(Node[Int], Node[Int], Double)],Set.empty[Node[Int]] )
-    graph = graph.addVertex(Node[Int](3))
-    graph = graph.addVertex(Node[Int](4))
-    graph = graph.addEdge((Node[Int](3), Node[Int](4), 5))
-    graph = graph.removeVertex(Node[Int](3))
-    graph.vertices.foreach(v => println(v.i))
-    graph.edges.foreach(e => println(e._3))
 
-    val city1 = new City(2, 2, "warszawa")
-    val city2 = new City(3, 0, "radom")
-    println(city1.heuristicValue(city2))
+    val gdansk = City(5, 10, "gdansk")
+    val warszawa = City(10, 8, "warszawa")
+    val poznan = City(0, 5, "poznan")
+    val stalowa = City(12, 3, "stalowa")
+    val krakow = City(5, 0, "krakow")
+
+    val graph = new Graph[City, Double](Set.empty[(Node[City], Node[City], Double)], Set.empty[Node[City]])
+      .addEdge(Node[City](gdansk), Node[City](poznan), 5)
+      .addEdge(Node[City](gdansk), Node[City](warszawa), 15)
+      .addEdge(Node[City](poznan), Node[City](warszawa), 2)
+      .addEdge(Node[City](poznan), Node[City](krakow), 10)
+      .addEdge(Node[City](stalowa), Node[City](krakow), 2)
+      .addEdge(Node[City](stalowa), Node[City](warszawa), 3)
+
+    val solver = AStar[City](graph)
+    println(solver.routeBetween(krakow, gdansk))
   }
 }
 

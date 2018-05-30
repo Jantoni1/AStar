@@ -12,4 +12,5 @@ class Graph[T, V](val edges : Set[(Node[T], Node[T], V)], val vertices : Set[Nod
 
   lazy val edgeMap: Map[Node[T], Set[Node[T]]] = edges.groupBy(_._1).mapValues(s => s.map(_._2))
 
+  def getEdgeWeight(from: Node[T], to: Node[T]): V = edges.filter(e => e._1 == from && e._2 == to).head._3
 }

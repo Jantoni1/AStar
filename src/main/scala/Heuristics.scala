@@ -1,3 +1,3 @@
 trait Heuristics {
-  def heuristicValue(other: Heuristics): Any
+  def heuristicValue(other: Heuristics): Double
 }
