@@ -14,3 +14,7 @@ libraryDependencies ++= Seq(
 )
 
 initialCommands := "import example._"
+
+scalacOptions in doc ++= Seq(
+  "--doc--root-content"
+)
