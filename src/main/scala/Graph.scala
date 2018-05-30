@@ -29,22 +29,24 @@ class Graph[T, V, N <: Heuristics[T,V]](val edges: Set[Edge[N,V]], val vertices 
 
   lazy val edgeMap: Map[N, Set[Node[N]]] = edges.groupBy(_.node1.value).mapValues(s => s.map(_.node2))
 
-  private def sum(x: V, y: V)(implicit n: Numeric[V]): V = n.plus(x, y)
+  private def sum(list: List[V])(implicit n: Numeric[V]): V = list.reduce((x: V, y: V) =>n.plus(x, y))
 
   def aStar(sourceNode : Node[N], destination : Node[N], initialCost : V)(implicit n: Numeric[V]) : List[Node[N]]  = {
     val initialHeuristics: V = sourceNode.value.heuristicValue(destination.value)
+
     @tailrec
     def iteration(source: Node[N], cost: V, heuristics: V, path: List[Node[N]]): List[Node[N]] = source match {
       case src if src == destination => path ++ List(src)
       case _ =>
         val newNode = edgeMap.apply(source.value).minBy(node =>
-          sum(sum(cost, getEdge(source, node).weight), node.value.heuristicValue(destination.value)))
+          sum(List(cost, getEdge(source, node).weight, node.value.heuristicValue(destination.value))))
     iteration(
           newNode,
-          sum(cost, getEdge(source, newNode).weight),
+          sum(List(cost, getEdge(source, newNode).weight)),
           newNode.value.heuristicValue(destination.value),
           path ++ List(source))
     }
+
     iteration(sourceNode, initialCost, initialHeuristics, Nil)
   }
 }
