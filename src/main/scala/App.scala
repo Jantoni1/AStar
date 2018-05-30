@@ -9,6 +9,10 @@ object App {
     graph = graph.removeVertex(Node[Int](3))
     graph.vertices.foreach(v => println(v.i))
     graph.edges.foreach(e => println(e._3))
+
+    val city1 = new City(2, 2, "warszawa")
+    val city2 = new City(3, 0, "radom")
+    println(city1.heuristicValue(city2))
   }
 }
 
