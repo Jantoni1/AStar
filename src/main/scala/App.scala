@@ -30,7 +30,7 @@ object App {
       return List(destination)
     }
     val newNode = graph.edgeMap.apply(source).minBy(node => {cost + graph.getEdge(source, node)._3 + value(node.i, destination.i) })//min(node => )
-    newNode :: aStar(graph, newNode, destination, cost, heuristics)
+    newNode :: aStar(graph, newNode, destination, cost + graph.getEdge(source, newNode)._3, value(newNode.i, destination.i))
   }
 }
 
