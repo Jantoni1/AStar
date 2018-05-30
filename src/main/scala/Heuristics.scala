@@ -1,3 +1,4 @@
-trait Heuristics {
-  def heuristicValue(other: Heuristics): Any
+trait Heuristics[T, V] {
+  def heuristicValue(other: Heuristics[T, V]): V
+  val value : T
 }

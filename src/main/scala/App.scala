@@ -1,37 +1,52 @@
+import scala.annotation.tailrec
+import scala.math.Numeric
+import scala.math.Numeric._
+import scala.math.Numeric.Implicits._
+import Ordering.Implicits._
+
+class Town(val value : (Int, Int)) extends  Heuristics[(Int, Int), Double] {
+  override def heuristicValue(other: Heuristics[(Int, Int), Double]): Double =
+    Math.sqrt(Math.pow(other.value._2 - value._2, 2) + Math.pow(other.value._1 - value._1, 2))
+
+  override def equals(obj: scala.Any): Boolean = obj match {
+    case town: Town => town.value == value
+    case _ => false
+  }
+
+  override def hashCode(): Int = {
+    val state = Seq(value)
+    state.map(_.hashCode()).foldLeft(0)((a, b) => 31 * a + b)
+  }
+}
+
+
 
 object App {
   def main(args: Array[String]) {
     println("Hello basic-project!")
-    var graph = new Graph[Int, Double](Set.empty[(Node[Int], Node[Int], Double)],Set.empty[Node[Int]] )
-    graph = graph.addVertex(Node[Int](3))
-    graph = graph.addVertex(Node[Int](4))
-    graph = graph.addEdge((Node[Int](3), Node[Int](4), 5))
-    graph = graph.removeVertex(Node[Int](3))
-    graph.vertices.foreach(v => println(v.i))
-    graph.edges.foreach(e => println(e._3))
+    var graph = new Graph[(Int, Int), Double, Town](Set.empty,Set.empty )
+    graph = graph.addVertex(Node[Town](new Town(3, 4)))
+    graph = graph.addVertex(Node[Town](new Town(4, 4)))
+    graph = graph.addVertex(Node[Town](new Town(5, 4)))
+    graph = graph.addVertex(Node[Town](new Town(6, 4)))
+    graph = graph.addVertex(Node[Town](new Town(7, 4)))
+    graph = graph.addVertex(Node[Town](new Town(8, 4)))
+    graph = graph.addVertex(Node[Town](new Town(9, 4)))
+    graph.vertices.foreach(v1 =>
+      graph.vertices.foreach(v2 =>
+        if((v1.value.value == (3, 4) && v2.value.value == (9, 4)) || (v1.value.value == (9, 4) && v2.value.value == (3, 4))) {
+          graph = graph.addEdge(Edge(v1, v2, 500))
+        }
+        else if(v1 != v2) {
+        graph = graph.addEdge(Edge(v1, v2, 4))
+      })  )
 
-    val city1 = new City(2, 2, "warszawa")
-    val city2 = new City(3, 0, "radom")
-    println(city1.heuristicValue(city2))
-
-    val destination = Node[(Int, Int)](3, 3)
-    var source = Node[(Int, Int)](4, 4)
-
-    var cost = 0
-    var heuristics = value(source.i, destination.i)
+    val result = graph.aStar(Node(new Town(3,4)), Node(new Town(9,4)), 0)
+    result.foreach(vertex => println(vertex.value.value))
 
   }
 
-  def value(xy1 : (Int, Int), xy2 : (Int, Int)) : Double =
-    Math.sqrt(Math.pow(xy2._2 - xy1._2, 2) + Math.pow(xy2._1 - xy1._1, 2))
 
-  def aStar(graph : Graph[(Int, Int), Double], source : Node[(Int, Int)], destination : Node[(Int, Int)],
-            cost : Double, heuristics : Double) : List[Node[(Int, Int)]]  = {
-    if(source == destination) {
-      return List(destination)
-    }
-    val newNode = graph.edgeMap.apply(source).minBy(node => {cost + graph.getEdge(source, node)._3 + value(node.i, destination.i) })
-    newNode :: aStar(graph, newNode, destination, cost + graph.getEdge(source, newNode)._3, value(newNode.i, destination.i))
-  }
+
 }
 
