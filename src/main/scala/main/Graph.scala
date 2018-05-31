@@ -107,19 +107,18 @@ class Graph[T, V: Ordering : Numeric, N <: Heuristics[T,V]](val edges: Set[Edge[
   private def sum(list: List[V])(implicit n: Numeric[V]): V = list.reduce((x: V, y: V) => n.plus(x, y))
 
   /**
-    * TODO
+    * finds optimal route from source node to destination node
     *
-    * @param source
-    * @param destination
-    * @param n
-    * @return
+    * @param source starting node
+    * @param destination destination node
+    * @return tuple of route's cost and nodes
     */
   def routeBetween(source: N, destination: N)(): (V, List[Node[N]]) = {
 
     /**
-      * TODO
+      * class made for calculating cost of given route
       *
-      * @param alreadyVisited
+      * @param alreadyVisited route
       */
     case class Route(alreadyVisited: List[Node[N]]) {
       def cost(): V = {
@@ -130,10 +129,10 @@ class Graph[T, V: Ordering : Numeric, N <: Heuristics[T,V]](val edges: Set[Edge[
     }
 
     /**
-      * TODO
+      * starts recursive A* algorithm
       *
-      * @param source
-      * @return
+      * @param source starting node
+      * @return route from starting node to destination
       */
     def beginJourney(source: N): Route = {
       discoverNewRoutes(List(Route(List(Node[N](source)))))
@@ -141,10 +140,10 @@ class Graph[T, V: Ordering : Numeric, N <: Heuristics[T,V]](val edges: Set[Edge[
 
 
     /**
-      * TODO
+      * recursively looks for the lowest cost route
       *
-      * @param allRoutes
-      * @return
+      * @param allRoutes list of previously generated routes
+      * @return cost and nodes of route
       */
     @tailrec
     def discoverNewRoutes(allRoutes: List[Route]): Route = {
