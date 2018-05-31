@@ -20,12 +20,11 @@ case class Node[T](value: T)
   * @tparam V type of weight
   */
 case class Edge[T, V](node1: Node[T], node2: Node[T], weight: V) {
-//  override def equals(obj: scala.Any): Boolean = obj match {
-//    case edge: Edge[T,V] =>
-//      ((node1 == edge.node1 && node2 == edge.node2) ||
-//        (node1 == edge.node2 && node2 == edge.node1)) && weight == edge.weight
-//    case _ => false
-//  }
+  override def equals(obj: scala.Any): Boolean = obj match {
+    case edge: Edge[T,V] =>
+      node1 == edge.node1 && node2 == edge.node2 && weight == edge.weight
+    case _ => false
+  }
 
   /**
     * Checks whether edge starts or ends in given node
