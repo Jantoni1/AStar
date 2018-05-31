@@ -1,0 +1,1 @@
+Index.PACKAGES = {"main" : [{"object" : "main\/App$.html", "name" : "main.App"}, {"case class" : "main\/City.html", "name" : "main.City"}, {"case class" : "main\/Edge.html", "name" : "main.Edge"}, {"class" : "main\/Graph.html", "name" : "main.Graph"}, {"trait" : "main\/Heuristics.html", "name" : "main.Heuristics"}, {"case class" : "main\/Node.html", "name" : "main.Node"}]};
