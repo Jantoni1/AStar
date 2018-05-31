@@ -20,12 +20,12 @@ case class Node[T](value: T)
   * @tparam V type of weight
   */
 case class Edge[T, V](node1: Node[T], node2: Node[T], weight: V) {
-  override def equals(obj: scala.Any): Boolean = obj match {
-    case edge: Edge[T,V] =>
-      ((node1 == edge.node1 && node2 == edge.node2) ||
-        (node1 == edge.node2 && node2 == edge.node1)) && weight == edge.weight
-    case _ => false
-  }
+//  override def equals(obj: scala.Any): Boolean = obj match {
+//    case edge: Edge[T,V] =>
+//      ((node1 == edge.node1 && node2 == edge.node2) ||
+//        (node1 == edge.node2 && node2 == edge.node1)) && weight == edge.weight
+//    case _ => false
+//  }
 
   /**
     * Checks whether edge starts or ends in given node
@@ -61,7 +61,7 @@ class Graph[T, V: Ordering : Numeric, N <: Heuristics[T,V]](val edges: Set[Edge[
     * @param node node to be removed
     * @return updated graph
     */
-  def removeVertex(node: Node[N]) = new Graph[T, V, N](edges.filter(_.contains(node)), vertices - node)
+  def removeVertex(node: Node[N]) = new Graph[T, V, N](edges.filter(!_.contains(node)), vertices - node)
 
   /**
     * Adds new edge between two nodes
@@ -80,7 +80,7 @@ class Graph[T, V: Ordering : Numeric, N <: Heuristics[T,V]](val edges: Set[Edge[
     * @param edge edge to be removed
     * @return updated graph
     */
-  def removeEdge(edge: Edge[N, V]) = new Graph[T, V, N](edges.filter(_ != edge), vertices)
+  def removeEdge(edge: Edge[N, V]) = new Graph[T, V, N](edges.filter(e => e != edge && getEdge(e.node2, e.node1) != edge), vertices)
 
   /**
     * Gets edge between two passed nodes
